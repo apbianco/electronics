@@ -1,26 +1,17 @@
 import math;
 
 ###############################################################################
-
-def Mili(x):
-    return x/1000.0
-
-def Micro(x):
-    return Mili(x)/1000.0
+# Self explanatory: return scaled input, convert input to scale.
+###############################################################################
 
 def Nano(x):
     return Micro(x)/1000.0
 
-def ToMili(x):
-    return x/Mili(x)
+def Micro(x):
+    return Mili(x)/1000.0
 
-def ToMicro(x):
-    return x/Micro(1)
-
-def ToNano(x):
-    return x/Nano(1)
-
-###############################################################################
+def Mili(x):
+    return x/1000.0
 
 def Kilo(x):
     return x*1000.0
@@ -28,26 +19,36 @@ def Kilo(x):
 def Mega(x):
     return Kilo(x)*1000.0
 
+def ToNano(x):
+    return x/Nano(1)
+
+def ToMicro(x):
+    return x/Micro(1)
+
+def ToMili(x):
+    return x/Mili(x)
+
 def ToKilo(x):
     return x/Kilo(1)
 
 def ToMega(x):
     return x/Mega(1)
 
-###############################################################################
-
 def ToKiloOhm(x):
-    return '{:.2f} KOhm'.format(ToKilo(x))
+    return '{:.3g} KOhm'.format(ToKilo(x))
 
 def ToMicroF(x):
-    return '{:.2f} uF'.format(ToMicro(x))
+    return '{:.3g} uF'.format(ToMicro(x))
 
 def ToMiliV(x):
-    return '{:.2f} mV'.format(ToMili(x))
+    return '{:.3g} mV'.format(ToMili(x))
 
 def ToKHz(x):
-    return '{:.2f} KHz'.format(ToKilo(x))
+    return '{:.3g} KHz'.format(ToKilo(x))
 
+###############################################################################
+# Convert X into its most convenient unit, return the value of X in
+# that discovered unit and the letter designating the unit.
 ###############################################################################
 
 def Unit(x):
@@ -61,12 +62,14 @@ def Unit(x):
     done = False
     while not done:
         if x/unit < 1000:
-            return ('{:.3f}'.format(x/unit), units[unit])
+            return ('{:.3g}'.format(x/unit), units[unit])
             done = True
         unit *= 1000
 
 ###############################################################################
-
+# Print the 2 or 3 color bands and the color of the multiplier ring for the
+# value of R. 
+###############################################################################
 def RValueToColors(R, Bands=5):
     stripes = str(int(R));
     values = {'0': 'Black',  '1': 'Brown',  '2': 'Red',
@@ -92,26 +95,46 @@ def RValueToColors(R, Bands=5):
     colors.append(multipliers[mult])
     return ' '.join(colors)
 
+# Print the colors corresponding to R, also print R in the most
+# convenient unit. Usage:
+#
+#   PrintRColor(2200000))
+#   PrintRColor(Mega(2.2))
+# 
+#   2.2M Ohms: Red Red Black | Yellow
+#
+#
+# A 2.2M Ohms resistor with 5 bands is labled Red/Red/Back and the
+# multiplier ring is Yellow.
+
 def PrintRColor(R, Bands=5):
     v, u = Unit(R)
     f = float(v)
     if f - int(f) == 0:
         v = int(f)
-    print('{:}{:} Ohms: {:}'.format(v, u, RValueToColors(R)))
+    c = RValueToColors(R)
+    if not c:
+        print('Can not convert {:} to color bands!'.format(R))
+    print('{:}{:} Ohms: {:}'.format(v, u, c))
 
 ###############################################################################
-
+# Cut off frequency for a RC circuit
+###############################################################################
 def FC(R, C, Conv=None):
-    f = 1/(2*math.pi*R*C);
+    f = 1/(2*math.pi*R*C)
     return Conv(f) if Conv else f
 
+###############################################################################
+# Simple resistor divider bridge
+###############################################################################
 def Bridge(Vin, R1, R2, Conv=None):
     Vo = Vin*R2/(R1+R2)
     return Conv(Vo) if Conv else Vo
 
 ###############################################################################
+# Polarization for a NPN transistor of gain Beta
 #
-# Transistor polarization for a NPN transistor of gain Beta
+# TODO: Use parameters, compute regime once Ib and Vce are known
 #
 #     Vcc -+--------+-
 #          |        |        
@@ -149,5 +172,4 @@ def Q():
 # print (FC(Kilo(16), Micro(0.01), ToKHz))
 # print (ToMicroF(Nano(55)))
 # print (ToKiloOhm(470*100))
-PrintRColor(Kilo(100))
-
+PrintRColor(Mega(2.2))
