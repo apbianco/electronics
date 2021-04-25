@@ -19,6 +19,9 @@ def Kilo(x):
 def Mega(x):
     return Kilo(x)*1000.0
 
+def Giga(x):
+    return Mega(x)*1000.0
+
 def ToNano(x):
     return x/Nano(1)
 
@@ -33,6 +36,9 @@ def ToKilo(x):
 
 def ToMega(x):
     return x/Mega(1)
+
+def ToGiga(x):
+    return x/Giga(1)
 
 def ToKiloOhm(x):
     return '{:.3g} KOhm'.format(ToKilo(x))
@@ -52,12 +58,10 @@ def ToKHz(x):
 ###############################################################################
 
 def Unit(x):
-    units = {Nano(1):  'n',
-             Micro(1): 'u',
-             Mili(1):  'm',
-             1:        '',
-             Kilo(1):  'K',
-             Mega(1):  'M'}
+    units = {
+        1:        '',
+        Nano(1):  'n', Micro(1): 'u', Mili(1): 'm', 
+        Kilo(1):  'K', Mega(1):  'M', Giga(1): 'G'}
     unit = Nano(1)
     done = False
     while not done:
@@ -74,16 +78,18 @@ def RValueToColors(R, Bands=5):
     stripes = str(int(R));
     values = {'0': 'Black',  '1': 'Brown',  '2': 'Red',
               '3': 'Orange', '4': 'Yellow', '5': 'Green',
-              '6': 'Blue',   '7': 'Violet', '8': 'Grey', '9': 'White'}
-    multipliers = {1: 'Black',      10: 'Brown',     100: 'Red',
-                   1000: 'Orange',  10000: 'Yellow', 100000: 'Green',
-                   1000000: 'Blue', 10000000: 'Violet'}
+              '6': 'Blue',   '7': 'Violet', '8': 'Grey',
+              '9': 'White'}
+    multipliers = {
+        1: 'Black',      10: 'Brown',     100: 'Red',
+        Kilo(1): 'Orange',  Kilo(10): 'Yellow', Kilo(100): 'Green',
+        Mega(1): 'Blue', Mega(10): 'Violet'}
     if Bands == 5:
         last = 3
     elif Bands == 4:
         last = 2
     else:
-       print('Can not handle bands=', Bands)
+       print('Can not handle {:} bands'.format(Bands))
        return None
 
     colors = []
@@ -172,4 +178,4 @@ def Q():
 # print (FC(Kilo(16), Micro(0.01), ToKHz))
 # print (ToMicroF(Nano(55)))
 # print (ToKiloOhm(470*100))
-PrintRColor(Mega(2.2))
+PrintRColor(Kilo(100))
