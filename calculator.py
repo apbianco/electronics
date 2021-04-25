@@ -50,6 +50,24 @@ def ToKHz(x):
 
 ###############################################################################
 
+def Unit(x):
+    units = {Nano(1):  'n',
+             Micro(1): 'u',
+             Mili(1):  'm',
+             1:        '',
+             Kilo(1):  'K',
+             Mega(1):  'M'}
+    unit = Nano(1)
+    done = False
+    while not done:
+        print(x/unit)
+        if x/unit < 1000:
+            return ('{:.3f}'.format(x/unit), units[unit])
+            done = True
+        unit *= 1000
+
+###############################################################################
+
 def RValueToColors(R, Bands=5):
     stripes = str(int(R));
     values = {'0': 'Black',  '1': 'Brown',  '2': 'Red',
@@ -60,10 +78,11 @@ def RValueToColors(R, Bands=5):
                    1000000: 'Blue', 10000000: 'Violet'}
     if Bands == 5:
         last = 3
-    if Bands == 4:
+    elif Bands == 4:
         last = 2
     else:
        print('Can not handle bands=', Bands)
+       return None
 
     colors = []
     for stripe in stripes[0:last]:
@@ -72,7 +91,14 @@ def RValueToColors(R, Bands=5):
     value = int(stripes[0:last])
     mult = int(R/value)
     colors.append(multipliers[mult])
-    print(' '.join(colors))
+    return ' '.join(colors)
+
+def PrintRColor(R, Bands=5):
+    v, u = Unit(R)
+    f = float(v)
+    if f - int(f) == 0:
+        v = int(f)
+    print('{:}{:} Ohms: {:}'.format(v, u, RValueToColors(R)))
 
 ###############################################################################
 
@@ -122,7 +148,9 @@ def Q():
 # print (ToMiliV(1))
 # print (Bridge(5, Kilo(16), Kilo(16), ToMiliV))
 # print (FC(Kilo(16), Micro(0.01), ToKHz))
-# print (ToMicroF(Nano(48)))
+print (ToMicroF(Nano(55)))
 # print (ToKiloOhm(470*100))
-print(RValueToColors(Kilo(100), Bands=5))
+print(RValueToColors(Kilo(47)))
+print(RValueToColors(Kilo(100)))
+PrintRColor(Kilo(10))
 
