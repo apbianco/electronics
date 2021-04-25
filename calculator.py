@@ -60,7 +60,6 @@ def Unit(x):
     unit = Nano(1)
     done = False
     while not done:
-        print(x/unit)
         if x/unit < 1000:
             return ('{:.3f}'.format(x/unit), units[unit])
             done = True
@@ -148,9 +147,7 @@ def Q():
 # print (ToMiliV(1))
 # print (Bridge(5, Kilo(16), Kilo(16), ToMiliV))
 # print (FC(Kilo(16), Micro(0.01), ToKHz))
-print (ToMicroF(Nano(55)))
+# print (ToMicroF(Nano(55)))
 # print (ToKiloOhm(470*100))
-print(RValueToColors(Kilo(47)))
-print(RValueToColors(Kilo(100)))
-PrintRColor(Kilo(10))
+PrintRColor(Kilo(100))
 
