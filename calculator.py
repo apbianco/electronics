@@ -4,6 +4,9 @@ import math;
 # Self explanatory: return scaled input, convert input to scale.
 ###############################################################################
 
+def Pico(x):
+    return Nano(x)/1000.0
+
 def Nano(x):
     return Micro(x)/1000.0
 
@@ -21,6 +24,9 @@ def Mega(x):
 
 def Giga(x):
     return Mega(x)*1000.0
+
+def ToPico(x):
+    return x/Pico(1)
 
 def ToNano(x):
     return x/Nano(1)
@@ -175,7 +181,7 @@ def Q():
     
 # print (ToMiliV(1))
 # print (Bridge(5, Kilo(16), Kilo(16), ToMiliV))
-# print (FC(Kilo(16), Micro(0.01), ToKHz))
+print (FC(Kilo(100), Pico(22), ToKHz))
 # print (ToMicroF(Nano(55)))
 # print (ToKiloOhm(470*100))
-PrintRColor(Kilo(100))
+# PrintRColor(Kilo(100))
